@@ -190,6 +190,50 @@ img { max-width:100%; }
   color:var(--text); margin:0 0 22px; }
 .addons-grid { display:grid; grid-template-columns:repeat(auto-fit,minmax(200px,1fr)); gap:12px; }
 .addon-item { display:flex; align-items:center; gap:10px; font-size:13px; color:var(--muted); }
+
+/* ── Service accordion ── */
+.svc-list { display:flex; flex-direction:column; gap:12px; }
+.svc-card { background:var(--surface); border:1px solid var(--border); border-radius:14px;
+  overflow:hidden; transition:border-color 0.25s ease, box-shadow 0.25s ease, background 0.25s ease; }
+.svc-card:hover { border-color:var(--border-hi); }
+.svc-card[open] { border-color:rgba(62,207,178,0.35); background:linear-gradient(160deg,rgba(62,207,178,0.05) 0%,var(--surface) 55%);
+  box-shadow:0 20px 48px rgba(0,0,0,0.3); }
+.svc-card > summary { list-style:none; cursor:pointer; padding:24px clamp(20px,3vw,30px);
+  display:grid; grid-template-columns:1fr auto; align-items:start; gap:20px; }
+.svc-card > summary::-webkit-details-marker { display:none; }
+.svc-card > summary:focus-visible { outline:2px solid var(--accent); outline-offset:-3px; }
+.svc-name { font-family:var(--font-display); font-size:19px; font-weight:800; color:var(--text);
+  letter-spacing:-0.01em; margin:0 0 6px; }
+.svc-tease { font-size:14px; line-height:1.6; color:var(--muted); margin:0; }
+.svc-plus { flex:0 0 auto; width:32px; height:32px; border:1px solid var(--border-hi); border-radius:50%;
+  display:grid; place-items:center; margin-top:2px; transition:background 0.25s, border-color 0.25s, transform 0.3s; }
+.svc-plus svg { width:14px; height:14px; stroke:var(--muted); stroke-width:2; transition:stroke 0.25s; }
+.svc-card[open] .svc-plus { background:var(--accent); border-color:var(--accent); transform:rotate(45deg); }
+.svc-card[open] .svc-plus svg { stroke:var(--bg); }
+.svc-card > summary:hover .svc-plus { border-color:var(--accent); }
+.svc-reveal { display:grid; grid-template-rows:0fr; transition:grid-template-rows 0.35s ease; }
+.svc-card[open] .svc-reveal { grid-template-rows:1fr; }
+.svc-reveal > div { overflow:hidden; }
+.svc-body { padding:0 clamp(20px,3vw,30px) 26px; }
+.svc-rule { height:1px; background:var(--border); margin:0 0 20px; }
+.svc-body p { font-size:15px; line-height:1.7; color:var(--muted); margin:0 0 16px; }
+.svc-body p.svc-lead { color:var(--text); }
+.svc-points { display:flex; flex-direction:column; gap:12px; margin-bottom:18px; }
+.svc-point { display:flex; align-items:flex-start; gap:10px; font-size:14px; line-height:1.6; color:var(--muted); }
+.svc-point svg { flex:0 0 auto; margin-top:3px; }
+.svc-proof { background:rgba(62,207,178,0.07); border:1px solid rgba(62,207,178,0.16); border-radius:10px;
+  padding:14px 16px; font-size:14px; line-height:1.6; color:var(--text); margin-bottom:18px; }
+.svc-proof strong { color:var(--accent); font-weight:700; }
+.svc-foot { display:flex; flex-wrap:wrap; align-items:center; gap:12px 20px;
+  border-top:1px solid var(--border); padding-top:16px; }
+.svc-model { font-size:11px; font-weight:700; letter-spacing:0.09em; text-transform:uppercase;
+  color:var(--dimmer); margin:0; }
+.svc-cta { margin-left:auto; font-family:var(--font-body); font-size:14px; font-weight:700; color:var(--accent);
+  background:none; border:none; padding:0; cursor:pointer; display:inline-flex; align-items:center; gap:7px; }
+.svc-cta svg { width:14px; height:14px; transition:transform 0.2s; }
+.svc-cta:hover svg { transform:translateX(4px); }
+.svc-cta:focus-visible { outline:2px solid var(--accent); outline-offset:3px; border-radius:4px; }
+@media (prefers-reduced-motion: reduce) { .svc-card, .svc-plus, .svc-reveal, .svc-cta svg { transition:none; } }
  
 /* ── About ── */
 .about-stats { display:flex; gap:48px; flex-wrap:wrap; margin:32px 0 44px;
@@ -357,10 +401,11 @@ textarea.form-input { resize:vertical; }
       <p style="font-size:17px;color:var(--muted);margin-top:12px" data-i18n="services.subtitle">Three ways to work together — pick what fits your stage.</p>
     </div>
     <div class="grid-3" id="tiers-grid" style="margin-bottom:48px"></div>
-    <div class="addons-box reveal">
-      <h3 data-i18n="services.addons.title">Also available as add-ons</h3>
-      <div class="addons-grid" id="addons-grid"></div>
+    <div class="reveal" style="text-align:center;margin:0 0 36px">
+      <h2 style="font-family:var(--font-display);font-size:clamp(24px,3.4vw,32px);font-weight:800;letter-spacing:-0.02em;margin:0" data-i18n="services.detail.title">What we actually do</h2>
+      <p style="font-size:16px;color:var(--muted);margin-top:10px" data-i18n="services.detail.sub">Tap any service to see what's inside.</p>
     </div>
+    <div class="svc-list" id="services-list"></div>
   </div>
 </div>
  
@@ -527,7 +572,38 @@ const T = {
           features:["Everything in Growth Retainer","Monthly strategy sessions","Executive reporting & KPIs","AI agent strategy & integration","Growth advisor for founders"] }
       ],
       addons:{ title:"Also available as add-ons",
-        items:["AI-powered customer support bot","CRM setup & automation","Fulfillment & CX audit","Sales templates by funnel stage","Market entry brief (LATAM → USA)","Reporting dashboards"] }
+        items:["AI-powered customer support bot","CRM setup & automation","Fulfillment & CX audit","Sales templates by funnel stage","Market entry brief (LATAM → USA)","Reporting dashboards"] },
+      detail:{ title:"What we actually do", sub:"Tap any service to see what\u2019s inside.", items:[
+        { id:"audit", name:"Digital Growth Audit", tease:"A full read of your digital operation \u2014 and what to fix first.",
+          lead:"Most businesses aren\u2019t missing effort. They\u2019re missing a clear read of which channel is leaking and which one is quietly working.",
+          points:["Every front reviewed at once \u2014 web, email, ads, e-commerce, support","A prioritized list separating quick wins from structural work","A 90-day roadmap you can run with us, or without us"],
+          proof:"Includes a <strong>market entry brief</strong> for companies moving into the US market.",
+          model:"Model A \u2014 Project", cta:"See what we\u2019d look at" },
+        { id:"channels", name:"Channel Optimization", tease:"The channels that drive revenue, rebuilt to actually convert.",
+          lead:"We rebuild the channels that move revenue, and connect them so leads stop falling between platforms.",
+          points:["Web, SEO and content built to be found","Email that reaches the inbox and converts","Meta Ads, Shopify, telephony and CRM working as one system"],
+          proof:"<strong>CAD/CAM Center Miami:</strong> email open rate from 4% to 18% in 90 days, leads up 20%, Shopify sales up 4% month over month.",
+          model:"Model A or B", cta:"Where\u2019s yours leaking?" },
+        { id:"ai-agents", name:"AI Agents", tease:"Follow-up that doesn\u2019t depend on someone remembering.",
+          lead:"Most businesses lose deals they already did the hard work to win. The estimate goes out, nobody follows up, and it quietly dies.",
+          body:"We build agents that handle the work nobody has time for \u2014 every day, in your voice, without being reminded.",
+          points:["Estimate follow-up at 7, 14 and 28 days","Inbound qualified and routed before you open your laptop","Support triaged and resolved without tying up your sales line","Customer service trained on your business, not a generic chatbot"],
+          proof:"<strong>Live at CAD/CAM Center Miami:</strong> automated estimate follow-up at 7, 14 and 28 days.",
+          model:"Model A or B", cta:"What could yours do?" },
+        { id:"cx", name:"CX & Operations", tease:"What happens after the sale, standardized.",
+          lead:"Acquisition gets all the attention. What happens after someone buys is what decides whether they come back.",
+          points:["Fulfillment and delivery experience, audited end to end","Response time standards your team can actually hold","Sales and support templates by funnel stage"],
+          model:"Model A \u2014 Project", cta:"Where does yours break?" },
+        { id:"reporting", name:"Reporting & Dashboards", tease:"Know which channel is actually making you money.",
+          lead:"If you can\u2019t see which channel produced last month\u2019s revenue, every budget decision is a guess.",
+          points:["KPIs defined once, then tracked consistently","One short monthly read \u2014 no vanity metrics","ROI per channel, including ours"],
+          model:"Model A or B", cta:"See a sample report" },
+        { id:"cmo", name:"Fractional CMO", tease:"A senior marketing lead, without the senior marketing salary.",
+          lead:"For founders who need marketing decisions made well, but don\u2019t yet need a full-time executive.",
+          body:"Wraps every service above into one engagement, at agreed hours per month.",
+          points:["Strategy set monthly \u2014 what to do next, and what to stop","Oversight of execution, whether it\u2019s us or your team doing it","A second opinion when the call is yours to make"],
+          model:"Model B \u2014 Monthly", cta:"Is this your stage?" }
+      ]}
     },
     about:{ headline:"15+ years building brands and growing businesses.",
       stats:[{ value:"15+", label:"Years Experience" },{ value:"EN/ES", label:"Fully Bilingual" },{ value:"Miami", label:"Based in Florida" }],
@@ -594,7 +670,38 @@ const T = {
           features:["Todo del Retainer de Crecimiento","Sesiones de estrategia mensual","Reporting ejecutivo y KPIs","Estrategia e integración AI agent","Growth advisor para founders"] }
       ],
       addons:{ title:"También disponibles como add-ons",
-        items:["Bot de soporte al cliente con IA","Setup y automatización CRM","Auditoría de fulfillment y CX","Templates de ventas por etapa del funnel","Market entry brief (LATAM → USA)","Dashboards de reporting"] }
+        items:["Bot de soporte al cliente con IA","Setup y automatización CRM","Auditoría de fulfillment y CX","Templates de ventas por etapa del funnel","Market entry brief (LATAM → USA)","Dashboards de reporting"] },
+      detail:{ title:"Qu\u00e9 hacemos en concreto", sub:"Toc\u00e1 cualquier servicio para ver qu\u00e9 incluye.", items:[
+        { id:"audit", name:"Auditor\u00eda de Crecimiento Digital", tease:"Una lectura completa de tu operaci\u00f3n digital \u2014 y qu\u00e9 arreglar primero.",
+          lead:"A la mayor\u00eda de los negocios no les falta esfuerzo. Les falta ver con claridad qu\u00e9 canal est\u00e1 perdiendo plata y cu\u00e1l est\u00e1 funcionando en silencio.",
+          points:["Todos los frentes revisados a la vez \u2014 web, email, ads, e-commerce, soporte","Una lista priorizada que separa las mejoras r\u00e1pidas del trabajo de fondo","Una hoja de ruta a 90 d\u00edas que pod\u00e9s ejecutar con nosotros, o sin nosotros"],
+          proof:"Incluye un <strong>market entry brief</strong> para empresas que entran al mercado de EE. UU.",
+          model:"Modelo A \u2014 Proyecto", cta:"\u00bfQu\u00e9 mirar\u00edamos en el tuyo?" },
+        { id:"channels", name:"Optimizaci\u00f3n de Canales", tease:"Los canales que generan ingresos, reconstruidos para que conviertan.",
+          lead:"Reconstruimos los canales que mueven el ingreso, y los conectamos para que los leads dejen de perderse entre plataformas.",
+          points:["Web, SEO y contenido pensados para que te encuentren","Email que llega al inbox y convierte","Meta Ads, Shopify, telefon\u00eda y CRM funcionando como un solo sistema"],
+          proof:"<strong>CAD/CAM Center Miami:</strong> tasa de apertura de email del 4% al 18% en 90 d\u00edas, leads +20%, ventas de Shopify +4% mes a mes.",
+          model:"Modelo A o B", cta:"\u00bfD\u00f3nde pierde el tuyo?" },
+        { id:"ai-agents", name:"Agentes de IA", tease:"Seguimiento que no depende de que alguien se acuerde.",
+          lead:"La mayor\u00eda de los negocios pierden ventas que ya ten\u00edan casi cerradas. Sale el presupuesto, nadie hace el seguimiento, y se muere en silencio.",
+          body:"Construimos agentes que se hacen cargo del trabajo que nadie tiene tiempo de hacer \u2014 todos los d\u00edas, con tu tono, sin que nadie se lo recuerde.",
+          points:["Seguimiento de presupuestos a los 7, 14 y 28 d\u00edas","Consultas entrantes calificadas y derivadas antes de que abras la laptop","Soporte filtrado y resuelto sin ocupar tu l\u00ednea comercial","Atenci\u00f3n al cliente entrenada en tu negocio, no un chatbot gen\u00e9rico"],
+          proof:"<strong>Activo en CAD/CAM Center Miami:</strong> seguimiento autom\u00e1tico de presupuestos a los 7, 14 y 28 d\u00edas.",
+          model:"Modelo A o B", cta:"\u00bfQu\u00e9 podr\u00eda hacer el tuyo?" },
+        { id:"cx", name:"CX y Operaciones", tease:"Lo que pasa despu\u00e9s de la venta, estandarizado.",
+          lead:"La captaci\u00f3n se lleva toda la atenci\u00f3n. Lo que pasa despu\u00e9s de que alguien compra es lo que define si vuelve.",
+          points:["Fulfillment y experiencia de entrega, auditados de punta a punta","Tiempos de respuesta que tu equipo puede sostener de verdad","Templates de ventas y soporte por etapa del funnel"],
+          model:"Modelo A \u2014 Proyecto", cta:"\u00bfD\u00f3nde se rompe el tuyo?" },
+        { id:"reporting", name:"Reportes y Dashboards", tease:"Saber qu\u00e9 canal te est\u00e1 dando plata de verdad.",
+          lead:"Si no pod\u00e9s ver qu\u00e9 canal gener\u00f3 el ingreso del mes pasado, cada decisi\u00f3n de presupuesto es una adivinanza.",
+          points:["KPIs definidos una vez, medidos siempre igual","Una lectura mensual corta \u2014 sin m\u00e9tricas de vanidad","ROI por canal, incluido el nuestro"],
+          model:"Modelo A o B", cta:"Ver un reporte de ejemplo" },
+        { id:"cmo", name:"CMO Fraccional", tease:"Un referente de marketing senior, sin el sueldo de un senior.",
+          lead:"Para founders que necesitan que las decisiones de marketing se tomen bien, pero todav\u00eda no necesitan un ejecutivo full-time.",
+          body:"Envuelve todos los servicios anteriores en una sola relaci\u00f3n, con horas pactadas por mes.",
+          points:["Estrategia definida cada mes \u2014 qu\u00e9 hacer y qu\u00e9 dejar de hacer","Supervisi\u00f3n de la ejecuci\u00f3n, la hagamos nosotros o tu equipo","Una segunda opini\u00f3n cuando la decisi\u00f3n es tuya"],
+          model:"Modelo B \u2014 Mensual", cta:"\u00bfEs tu momento?" }
+      ]}
     },
     about:{ headline:"15+ años construyendo marcas y haciendo crecer negocios.",
       stats:[{ value:"15+", label:"Años de experiencia" },{ value:"EN/ES", label:"Totalmente bilingüe" },{ value:"Miami", label:"Basado en Florida" }],
@@ -694,9 +801,34 @@ function renderAll(){
       <button class="tier-btn ${tier.featured?'tier-btn-primary':'tier-btn-outline'}" onclick="navigate('contact')">${t.hero.cta}</button>
     </div>`).join('');
  
-  // Addons
-  document.getElementById('addons-grid').innerHTML=t.services.addons.items.map(item=>`
-    <div class="addon-item">${CHECK}<span>${item}</span></div>`).join('');
+  // Service detail accordion
+  const svcList=document.getElementById('services-list');
+  if(svcList && t.services.detail){
+    const openIds=new Set(Array.prototype.slice.call(svcList.querySelectorAll('details[open]')).map(d=>d.id));
+    svcList.innerHTML=t.services.detail.items.map((item,i)=>`
+      <details class="svc-card" id="${item.id}"${openIds.has(item.id)?' open':''}>
+        <summary>
+          <div>
+            <h3 class="svc-name">${item.name}</h3>
+            <p class="svc-tease">${item.tease}</p>
+          </div>
+          <span class="svc-plus" aria-hidden="true"><svg viewBox="0 0 16 16" fill="none" stroke-linecap="round"><path d="M8 2.5v11M2.5 8h11"/></svg></span>
+        </summary>
+        <div class="svc-reveal"><div>
+          <div class="svc-body">
+            <div class="svc-rule"></div>
+            <p class="svc-lead">${item.lead}</p>
+            ${item.body?`<p>${item.body}</p>`:''}
+            <div class="svc-points">${item.points.map(pt=>`<div class="svc-point">${CHECK}<span>${pt}</span></div>`).join('')}</div>
+            ${item.proof?`<div class="svc-proof">${item.proof}</div>`:''}
+            <div class="svc-foot">
+              <p class="svc-model">${item.model}</p>
+              <button type="button" class="svc-cta" onclick="navigate('contact')">${item.cta}<svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 8h10M9 4l4 4-4 4"/></svg></button>
+            </div>
+          </div>
+        </div></div>
+      </details>`).join('');
+  }
  
   // Stats
   document.getElementById('stats-grid').innerHTML=t.about.stats.map(s=>`
