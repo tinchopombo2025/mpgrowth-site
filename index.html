@@ -1,3 +1,4 @@
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -118,7 +119,7 @@ img { max-width:100%; }
  
 /* ── Capabilities grid ── */
 .grid-4 { display:grid; grid-template-columns:repeat(auto-fit,minmax(230px,1fr)); gap:16px; }
-
+ 
 /* ── Expandable capability cards (home) ── */
 #capabilities-grid { align-items:start; }
 details.card { padding:0; cursor:default; }
@@ -139,12 +140,9 @@ details.card[open] .cap-reveal { grid-template-rows:1fr; }
 .cap-reveal > div { overflow:hidden; }
 .cap-body { padding:0 26px 26px; }
 .cap-rule { height:1px; background:var(--border); margin:0 0 16px; }
-.cap-points { display:flex; flex-direction:column; gap:10px; margin-bottom:14px; }
+.cap-points { display:flex; flex-direction:column; gap:10px; margin-bottom:16px; }
 .cap-point { display:flex; align-items:flex-start; gap:9px; font-size:13.5px; line-height:1.55; color:var(--muted); }
 .cap-point svg { flex:0 0 auto; margin-top:3px; }
-.cap-proof { background:rgba(62,207,178,0.07); border:1px solid rgba(62,207,178,0.16); border-radius:9px;
-  padding:11px 13px; font-size:13px; line-height:1.55; color:var(--text); margin-bottom:14px; }
-.cap-proof strong { color:var(--accent); font-weight:700; }
 .cap-cta { font-family:var(--font-body); font-size:13.5px; font-weight:700; color:var(--accent); background:none;
   border:none; padding:0; cursor:pointer; display:inline-flex; align-items:center; gap:6px; }
 .cap-cta svg { width:13px; height:13px; transition:transform 0.2s; }
@@ -186,14 +184,6 @@ details.card[open] .cap-reveal { grid-template-rows:1fr; }
 .case-label  { font-size:12px; font-weight:600; color:var(--text); margin-bottom:4px; }
 .case-detail { font-size:12px; line-height:1.5; color:var(--muted); }
  
-/* ── Testimonials ── */
-.testimonial-card { padding:28px; border-radius:14px; background:var(--surface);
-  border:1px solid var(--border); }
-.quote-mark { font-size:36px; line-height:1; color:var(--accent); margin-bottom:10px; opacity:0.6; }
-.testimonial-card p { font-size:14px; line-height:1.75; color:var(--muted); margin:0 0 22px; font-style:italic; }
-.testimonial-name { font-size:13px; font-weight:700; color:var(--text); }
-.testimonial-role { font-size:12px; color:var(--dimmer); margin-top:2px; }
- 
 /* ── Services tiers ── */
 .tier-card { background:var(--surface); border:1px solid var(--border);
   border-radius:18px; padding:34px; position:relative; transition:all 0.3s; }
@@ -223,7 +213,7 @@ details.card[open] .cap-reveal { grid-template-rows:1fr; }
   color:var(--text); margin:0 0 22px; }
 .addons-grid { display:grid; grid-template-columns:repeat(auto-fit,minmax(200px,1fr)); gap:12px; }
 .addon-item { display:flex; align-items:center; gap:10px; font-size:13px; color:var(--muted); }
-
+ 
 /* ── Service accordion ── */
 .svc-list { display:flex; flex-direction:column; gap:12px; }
 .svc-card { background:var(--surface); border:1px solid var(--border); border-radius:14px;
@@ -404,19 +394,9 @@ textarea.form-input { resize:vertical; }
         <div class="case-glow"></div>
         <div class="eyebrow" data-i18n="caseStudy.tag">Case Study</div>
         <h2 data-i18n="caseStudy.title">CAD/CAM Center Miami</h2>
-        <p data-i18n="caseStudy.desc">How we transformed the entire digital operation of an industrial tech distributor in 90 days — from fragmented channels to a measurable growth engine.</p>
+        <p data-i18n="caseStudy.desc">How we rebuilt the digital operation of an industrial tech distributor — from fragmented channels to a measurable growth engine.</p>
         <div class="case-grid" id="case-grid"></div>
       </div>
-    </div>
-  </section>
- 
-  <section class="section">
-    <div class="container">
-      <div style="text-align:center;margin-bottom:44px" class="reveal">
-        <div class="eyebrow" data-i18n="testimonials.tag">What Clients Say</div>
-        <h2 class="section-title" data-i18n="testimonials.title">Trusted by Businesses Ready to Grow</h2>
-      </div>
-      <div class="grid-3" id="testimonials-grid"></div>
     </div>
   </section>
  
@@ -560,12 +540,12 @@ const T = {
     cta:{ label:"Ready to scale?" },
     nav:{ home:"Home", services:"Services", about:"About", contact:"Contact" },
     capabilities:[
-      { icon:'<svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#3ECFB2" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="11" width="18" height="10" rx="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/><circle cx="12" cy="16" r="1" fill="#3ECFB2" stroke="none"/></svg>', title:"AI Agents", desc:"Agents that follow up, qualify and answer — every day, without being reminded." , more:["Estimate follow-up at 7, 14 and 28 days","Inbound qualified and routed before you open your laptop","Support triaged without tying up your sales line"], proof:"<strong>Live at CAD/CAM Center Miami:</strong> automated estimate follow-up." },
-      { icon:'<svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#3ECFB2" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="6" height="6" rx="1"/><rect x="15" y="15" width="6" height="6" rx="1"/><path d="M6 9v3a3 3 0 0 0 3 3h3"/><path d="M15 6h3a3 3 0 0 1 3 3v3"/></svg>', title:"AI Automation", desc:"Your systems talking to each other, so nobody moves data by hand.", more:["CRM, Shopify and ads connected end to end","Workflows that route a lead the second it arrives","Manual data entry removed from your team's week"], proof:"<strong>CAD/CAM Center Miami:</strong> Meta Ads + Zapier routing leads straight to the sales team." },
-      { icon:'<svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#3ECFB2" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="4" width="20" height="16" rx="2"/><path d="m2 7 10 7 10-7"/></svg>', title:"Email & CRM", desc:"Segmented lists, nurturing sequences, and deliverability that actually reaches the inbox." , more:["Segmentation and nurturing sequences that fit your funnel","Deliverability repaired so you actually reach the inbox","CRM set up so no lead goes untracked"], proof:"<strong>CAD/CAM Center Miami:</strong> open rate from 4% to 18% in 90 days." },
-      { icon:'<svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#3ECFB2" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M6 2 3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4z"/><line x1="3" y1="6" x2="21" y2="6"/><path d="M16 10a4 4 0 0 1-8 0"/></svg>', title:"E-Commerce & Shopify", desc:"Store optimization, product pages, Shopify Ads, and conversion flows that turn visitors into buyers." , more:["Product pages and checkout rebuilt to convert","Shopify Ads managed against real margin","Flows that recover carts before they go cold"], proof:"<strong>CAD/CAM Center Miami:</strong> sales up 4% month over month." },
-      { icon:'<svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#3ECFB2" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M3 20h18M8 20V10M12 20V4M16 20v-6"/></svg>', title:"Reporting & ROI", desc:"KPI dashboards and monthly reporting so you always know what's working." , more:["KPIs defined once, then tracked consistently","One short monthly read — no vanity metrics","ROI per channel, including ours"] },
-      { icon:'<svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#3ECFB2" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2L2 7l10 5 10-5-10-5z"/><path d="M2 17l10 5 10-5"/><path d="M2 12l10 5 10-5"/></svg>', title:"Brand & Messaging", desc:"Positioning, copy consistency, and tone of voice aligned across every channel — so your brand not only speaks with one voice, but pulls the right people in." , more:["Positioning that says what you actually do","One voice across web, email and ads","Copy consistency from first click to inbox"] }
+      { icon:'<svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#3ECFB2" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="11" width="18" height="10" rx="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/><circle cx="12" cy="16" r="1" fill="#3ECFB2" stroke="none"/></svg>', title:"AI Agents", desc:"Agents that follow up, qualify and answer — every day, without being reminded." , more:["Follow-up on schedule","Inbound qualified and routed","Support triaged automatically"] },
+      { icon:'<svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#3ECFB2" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="6" height="6" rx="1"/><rect x="15" y="15" width="6" height="6" rx="1"/><path d="M6 9v3a3 3 0 0 0 3 3h3"/><path d="M15 6h3a3 3 0 0 1 3 3v3"/></svg>', title:"AI Automation", desc:"Your systems talking to each other, so nobody moves data by hand.", more:["Systems connected end to end","Leads routed on arrival","No manual data entry"] },
+      { icon:'<svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#3ECFB2" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="4" width="20" height="16" rx="2"/><path d="m2 7 10 7 10-7"/></svg>', title:"Email & CRM", desc:"Segmented lists, nurturing sequences, and deliverability that actually reaches the inbox." , more:["Segmented lists and nurturing","Deliverability repaired","Every lead tracked in CRM"] },
+      { icon:'<svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#3ECFB2" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M6 2 3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4z"/><line x1="3" y1="6" x2="21" y2="6"/><path d="M16 10a4 4 0 0 1-8 0"/></svg>', title:"E-Commerce & Shopify", desc:"Store optimization, product pages, Shopify Ads, and conversion flows that turn visitors into buyers." , more:["Product pages that convert","Ads managed against margin","Cart recovery flows"] },
+      { icon:'<svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#3ECFB2" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M3 20h18M8 20V10M12 20V4M16 20v-6"/></svg>', title:"Reporting & ROI", desc:"KPI dashboards and monthly reporting so you always know what's working." , more:["KPIs tracked consistently","One short monthly read","ROI per channel"] },
+      { icon:'<svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#3ECFB2" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2L2 7l10 5 10-5-10-5z"/><path d="M2 17l10 5 10-5"/><path d="M2 12l10 5 10-5"/></svg>', title:"Brand & Messaging", desc:"Positioning, copy consistency, and tone of voice aligned across every channel — so your brand not only speaks with one voice, but pulls the right people in." , more:["Positioning that's clear","One voice across channels","Built to be cited by AI"] }
     ],
     capabilitiesCta:"Talk it through",
     why:{ tag:"Why MPGrowth?", title:"More Than Marketing.\nWe Build Growth Engines.",
@@ -577,19 +557,12 @@ const T = {
       ]
     },
     caseStudy:{ tag:"Case Study", title:"CAD/CAM Center Miami",
-      desc:"How we transformed the entire digital operation of an industrial tech distributor in 90 days — from fragmented channels to a measurable growth engine.",
+      desc:"How we rebuilt the digital operation of an industrial tech distributor — from fragmented channels to a measurable growth engine.",
       results:[
-        { metric:"+350%", label:"Email open rate", detail:"From 4% to 18% — list cleanup, segmentation, and deliverability fixes" },
-        { metric:"+20%",  label:"Leads in 3 months", detail:"Meta Ads + Zapier automation routing leads directly to the sales team" },
+        { metric:"+250%", label:"Email open rate", detail:"From 4% to 14% — list cleanup, segmentation, and deliverability fixes" },
+        { metric:"+20%",  label:"Leads in 3 months", detail:"Meta Ads, automated routing, and call journey optimization in Quo — no inbound gets lost" },
         { metric:"+4%/mo",label:"Shopify sales", detail:"Month-over-month growth, sustained — not a one-time spike" },
         { metric:"AI bot", label:"Customer support", detail:"Trained on their catalog — reduces ops load, monetizable as a subscription" }
-      ]
-    },
-    testimonials:{ tag:"What Clients Say", title:"Trusted by Businesses Ready to Grow",
-      items:[
-        { quote:"MPGrowth transformed our digital presence. We went from invisible online to getting qualified leads every week.", name:"Your Client Name", role:"Industry / Business" },
-        { quote:"Having Tincho as our fractional CMO was a game-changer. He thinks like a business owner, not just a marketer.", name:"Your Client Name", role:"Industry / Business" },
-        { quote:"The automation workflows they built save us hours every week and our response time went from days to minutes.", name:"Your Client Name", role:"Industry / Business" }
       ]
     },
     services:{ title:"Services", subtitle:"Three ways to work together — pick what fits your stage.",
@@ -615,7 +588,7 @@ const T = {
         { id:"channels", name:"Channel Optimization", tease:"The channels that drive revenue, rebuilt to actually convert.",
           lead:"We rebuild the channels that move revenue, and connect them so leads stop falling between platforms.",
           points:["Web, SEO and content built to be found","Email that reaches the inbox and converts","Meta Ads, Shopify, telephony and CRM working as one system","Paid campaigns run only where the return can be measured"],
-          proof:"<strong>CAD/CAM Center Miami:</strong> email open rate from 4% to 18% in 90 days, leads up 20%, Shopify sales up 4% month over month.",
+          proof:"<strong>CAD/CAM Center Miami:</strong> email open rate more than tripled, leads up 20%, Shopify sales up 4% month over month.",
           model:"Model A or B", cta:"Where\u2019s yours leaking?" },
         { id:"ai-agents", name:"AI Agents", tease:"Follow-up that doesn\u2019t depend on someone remembering.",
           lead:"Most businesses lose deals they already did the hard work to win. The estimate goes out, nobody follows up, and it quietly dies.",
@@ -658,12 +631,12 @@ const T = {
     cta:{ label:"¿Listo para escalar?" },
     nav:{ home:"Inicio", services:"Servicios", about:"Nosotros", contact:"Contacto" },
     capabilities:[
-      { icon:'<svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#3ECFB2" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="11" width="18" height="10" rx="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/><circle cx="12" cy="16" r="1" fill="#3ECFB2" stroke="none"/></svg>', title:"Agentes de IA", desc:"Agentes que hacen seguimiento, califican y responden — todos los días, sin que nadie se lo recuerde." , more:["Seguimiento de presupuestos a los 7, 14 y 28 días","Consultas calificadas y derivadas antes de que abras la laptop","Soporte filtrado sin ocupar tu línea comercial"], proof:"<strong>Activo en CAD/CAM Center Miami:</strong> seguimiento automático de presupuestos." },
-      { icon:'<svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#3ECFB2" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="6" height="6" rx="1"/><rect x="15" y="15" width="6" height="6" rx="1"/><path d="M6 9v3a3 3 0 0 0 3 3h3"/><path d="M15 6h3a3 3 0 0 1 3 3v3"/></svg>', title:"Automatización IA", desc:"Tus sistemas hablando entre sí, para que nadie mueva datos a mano.", more:["CRM, Shopify y ads conectados de punta a punta","Workflows que derivan el lead apenas entra","Carga manual de datos eliminada de la semana de tu equipo"], proof:"<strong>CAD/CAM Center Miami:</strong> Meta Ads + Zapier con routing directo al equipo comercial." },
-      { icon:'<svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#3ECFB2" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="4" width="20" height="16" rx="2"/><path d="m2 7 10 7 10-7"/></svg>', title:"Email & CRM", desc:"Listas segmentadas, secuencias de nurturing y deliverability que llega al inbox." , more:["Segmentación y secuencias de nurturing a la medida de tu funnel","Deliverability reparada para llegar de verdad al inbox","CRM configurado para que ningún lead se pierda"], proof:"<strong>CAD/CAM Center Miami:</strong> apertura del 4% al 18% en 90 días." },
-      { icon:'<svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#3ECFB2" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M6 2 3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4z"/><line x1="3" y1="6" x2="21" y2="6"/><path d="M16 10a4 4 0 0 1-8 0"/></svg>', title:"E-Commerce & Shopify", desc:"Optimización de tienda, páginas de producto, Shopify Ads y flujos de conversión que convierten visitas en ventas." , more:["Páginas de producto y checkout reconstruidos para convertir","Shopify Ads gestionados contra margen real","Flujos que recuperan carritos antes de que se enfríen"], proof:"<strong>CAD/CAM Center Miami:</strong> ventas +4% mes a mes." },
-      { icon:'<svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#3ECFB2" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M3 20h18M8 20V10M12 20V4M16 20v-6"/></svg>', title:"Reporting & ROI", desc:"Dashboards de KPIs y reportes mensuales para saber siempre qué funciona." , more:["KPIs definidos una vez, medidos siempre igual","Una lectura mensual corta — sin métricas de vanidad","ROI por canal, incluido el nuestro"] },
-      { icon:'<svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#3ECFB2" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2L2 7l10 5 10-5-10-5z"/><path d="M2 17l10 5 10-5"/><path d="M2 12l10 5 10-5"/></svg>', title:"Brand & Messaging", desc:"Posicionamiento, consistencia de copy y tono de voz alineados en cada canal — para que tu marca diga lo mismo en todos lados." , more:["Posicionamiento que dice lo que realmente hacés","Una sola voz en web, email y ads","Consistencia de copy desde el primer clic hasta el inbox"] }
+      { icon:'<svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#3ECFB2" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="11" width="18" height="10" rx="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/><circle cx="12" cy="16" r="1" fill="#3ECFB2" stroke="none"/></svg>', title:"Agentes de IA", desc:"Agentes que hacen seguimiento, califican y responden — todos los días, sin que nadie se lo recuerde." , more:["Seguimiento en tiempo y forma","Consultas calificadas y derivadas","Soporte filtrado automáticamente"] },
+      { icon:'<svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#3ECFB2" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="6" height="6" rx="1"/><rect x="15" y="15" width="6" height="6" rx="1"/><path d="M6 9v3a3 3 0 0 0 3 3h3"/><path d="M15 6h3a3 3 0 0 1 3 3v3"/></svg>', title:"Automatización IA", desc:"Tus sistemas hablando entre sí, para que nadie mueva datos a mano.", more:["Sistemas conectados de punta a punta","Leads derivados al instante","Sin carga manual de datos"] },
+      { icon:'<svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#3ECFB2" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="4" width="20" height="16" rx="2"/><path d="m2 7 10 7 10-7"/></svg>', title:"Email & CRM", desc:"Listas segmentadas, secuencias de nurturing y deliverability que llega al inbox." , more:["Listas segmentadas y nurturing","Deliverability reparada","Cada lead trackeado en el CRM"] },
+      { icon:'<svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#3ECFB2" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M6 2 3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4z"/><line x1="3" y1="6" x2="21" y2="6"/><path d="M16 10a4 4 0 0 1-8 0"/></svg>', title:"E-Commerce & Shopify", desc:"Optimización de tienda, páginas de producto, Shopify Ads y flujos de conversión que convierten visitas en ventas." , more:["Páginas de producto que convierten","Ads gestionados contra margen","Flujos de recupero de carrito"] },
+      { icon:'<svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#3ECFB2" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M3 20h18M8 20V10M12 20V4M16 20v-6"/></svg>', title:"Reporting & ROI", desc:"Dashboards de KPIs y reportes mensuales para saber siempre qué funciona." , more:["KPIs medidos siempre igual","Una lectura mensual corta","ROI por canal"] },
+      { icon:'<svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#3ECFB2" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2L2 7l10 5 10-5-10-5z"/><path d="M2 17l10 5 10-5"/><path d="M2 12l10 5 10-5"/></svg>', title:"Brand & Messaging", desc:"Posicionamiento, consistencia de copy y tono de voz alineados en cada canal — para que tu marca diga lo mismo en todos lados." , more:["Posicionamiento claro","Una sola voz en todos los canales","Pensado para que la IA te cite"] }
     ],
     capabilitiesCta:"Hablemos",
     why:{ tag:"¿Por qué MPGrowth?", title:"Más que marketing.\nConstruimos motores de crecimiento.",
@@ -675,19 +648,12 @@ const T = {
       ]
     },
     caseStudy:{ tag:"Caso de Éxito", title:"CAD/CAM Center Miami",
-      desc:"Cómo transformamos la operación digital completa de un distribuidor de tecnología industrial en 90 días.",
+      desc:"Cómo reconstruimos la operación digital completa de un distribuidor de tecnología industrial — de canales fragmentados a un motor de crecimiento medible.",
       results:[
-        { metric:"+350%", label:"Tasa de apertura", detail:"De 4% a 18% — limpieza de lista, segmentación y mejora de deliverability" },
-        { metric:"+20%",  label:"Leads en 3 meses", detail:"Meta Ads + automatización Zapier con routing directo al equipo comercial" },
+        { metric:"+250%", label:"Tasa de apertura", detail:"De 4% a 14% — limpieza de lista, segmentación y mejora de deliverability" },
+        { metric:"+20%",  label:"Leads en 3 meses", detail:"Meta Ads, routing automatizado y optimización del call journey en Quo — ninguna consulta se pierde" },
         { metric:"+4%/mes",label:"Ventas Shopify", detail:"Crecimiento sostenido mes a mes — no un pico aislado" },
         { metric:"AI bot", label:"Soporte al cliente", detail:"Entrenado en su catálogo — reduce carga operativa, monetizable como suscripción" }
-      ]
-    },
-    testimonials:{ tag:"Lo que dicen nuestros clientes", title:"Empresas que confían en nosotros para crecer",
-      items:[
-        { quote:"MPGrowth transformó nuestra presencia digital. Pasamos de ser invisibles online a recibir leads calificados cada semana.", name:"Nombre del Cliente", role:"Industria / Negocio" },
-        { quote:"Tener a Tincho como CMO fraccional fue un game-changer. Piensa como dueño de negocio, no solo como marketer.", name:"Nombre del Cliente", role:"Industria / Negocio" },
-        { quote:"Los workflows de automatización que armaron nos ahorran horas cada semana y nuestro tiempo de respuesta pasó de días a minutos.", name:"Nombre del Cliente", role:"Industria / Negocio" }
       ]
     },
     services:{ title:"Servicios", subtitle:"Tres formas de trabajar juntos — elegí la que se adapte a tu etapa.",
@@ -713,7 +679,7 @@ const T = {
         { id:"channels", name:"Optimizaci\u00f3n de Canales", tease:"Los canales que generan ingresos, reconstruidos para que conviertan.",
           lead:"Reconstruimos los canales que mueven el ingreso, y los conectamos para que los leads dejen de perderse entre plataformas.",
           points:["Web, SEO y contenido pensados para que te encuentren","Email que llega al inbox y convierte","Meta Ads, Shopify, telefon\u00eda y CRM funcionando como un solo sistema","Campa\u00f1as pagas solo donde el retorno se puede medir"],
-          proof:"<strong>CAD/CAM Center Miami:</strong> tasa de apertura de email del 4% al 18% en 90 d\u00edas, leads +20%, ventas de Shopify +4% mes a mes.",
+          proof:"<strong>CAD/CAM Center Miami:</strong> la tasa de apertura de email m\u00e1s que se triplic\u00f3, leads +20%, ventas de Shopify +4% mes a mes.",
           model:"Modelo A o B", cta:"\u00bfD\u00f3nde pierde el tuyo?" },
         { id:"ai-agents", name:"Agentes de IA", tease:"Seguimiento que no depende de que alguien se acuerde.",
           lead:"La mayor\u00eda de los negocios pierden ventas que ya ten\u00edan casi cerradas. Sale el presupuesto, nadie hace el seguimiento, y se muere en silencio.",
@@ -807,7 +773,6 @@ function renderAll(){
         <div class="cap-body">
           <div class="cap-rule"></div>
           <div class="cap-points">${(c.more||[]).map(m=>`<div class="cap-point">${CHECK}<span>${m}</span></div>`).join('')}</div>
-          ${c.proof?`<div class="cap-proof">${c.proof}</div>`:''}
           <button type="button" class="cap-cta" onclick="navigate('contact')">${t.capabilitiesCta||'Talk it through'}<svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 8h10M9 4l4 4-4 4"/></svg></button>
         </div>
       </div></div>
@@ -827,14 +792,6 @@ function renderAll(){
       <div class="case-metric">${r.metric}</div>
       <div class="case-label">${r.label}</div>
       <div class="case-detail">${r.detail}</div>
-    </div>`).join('');
- 
-  // Testimonials
-  document.getElementById('testimonials-grid').innerHTML=t.testimonials.items.map((item,i)=>`
-    <div class="testimonial-card reveal reveal-delay-${i+1}">
-      <div class="quote-mark">"</div>
-      <p>${item.quote}</p>
-      <div><div class="testimonial-name">${item.name}</div><div class="testimonial-role">${item.role}</div></div>
     </div>`).join('');
  
   // Tiers
@@ -930,4 +887,3 @@ setInterval(rotateWord, 2400);
 </script>
 </body>
 </html>
- 
