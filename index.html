@@ -100,12 +100,10 @@ img { max-width:100%; }
 .hero-pill-text { font-size:12px; font-weight:600; color:var(--accent); letter-spacing:0.06em; }
 .hero h1 { font-family:var(--font-display); font-size:clamp(30px,5.5vw,58px);
   font-weight:800; line-height:1.03; letter-spacing:-0.045em; color:var(--text);
-  margin:0 0 24px; text-wrap:balance; }
+  margin:0 0 24px; }
 .hero h1 em { font-style:normal;
-  color:var(--accent2);                    /* fallback if background-clip:text is unsupported */
   background:linear-gradient(135deg,var(--accent) 0%,var(--accent2) 100%);
-  -webkit-background-clip:text; -webkit-text-fill-color:transparent; background-clip:text;
-  -webkit-box-decoration-break:clone; box-decoration-break:clone; }
+  -webkit-background-clip:text; -webkit-text-fill-color:transparent; background-clip:text; }
 .hero p { font-size:clamp(16px,2.2vw,19px); line-height:1.75; color:var(--muted);
   max-width:580px; margin:0 0 44px; }
 .hero-btns { display:flex; gap:14px; flex-wrap:wrap; justify-content:center; }
@@ -263,7 +261,6 @@ details.card[open] .cap-reveal { grid-template-rows:1fr; }
 .about-stats { display:flex; gap:48px; flex-wrap:wrap; margin:32px 0 44px;
   padding:24px 0; border-top:1px solid var(--border); border-bottom:1px solid var(--border); }
 .stat-value { font-family:var(--font-display); font-size:38px; font-weight:800;
-  color:var(--accent);
   background:linear-gradient(135deg,var(--accent),var(--accent2));
   -webkit-background-clip:text; -webkit-text-fill-color:transparent; background-clip:text; }
 .stat-label { font-size:13px; color:var(--muted); margin-top:4px; }
@@ -319,38 +316,11 @@ textarea.form-input { resize:vertical; }
 @media(max-width:480px){
   .case-grid { grid-template-columns:1fr; }
 }
- 
-/* ── Rotating word ──
-   The word must NOT live inside the gradient <em>. An element with
-   -webkit-background-clip:text paints its gradient only through the text of its
-   own inline boxes; a child that is display:inline-block (atomic inline) or that
-   animates opacity (own compositing layer) is painted separately, inherits
-   -webkit-text-fill-color:transparent, gets no background, and renders invisible
-   while still reserving layout space. That was the black gap on iOS Safari.
- 
-   .rotator stacks a hidden sizer and the visible word in one grid cell, so the
-   slot is always as wide as the longest word in the active language and the
-   headline never re-wraps mid-rotation. */
-.rotator { display:inline-grid; vertical-align:baseline; text-align:center; }
-.rotator > * { grid-area:1 / 1; }
-.rotator-sizer { visibility:hidden; pointer-events:none; }
-/* Two stacked layers hand off in sequence: the outgoing one fades out over
-   200ms, the incoming one starts exactly when that finishes. No overlapping
-   glyphs, and — because .rotator-sizer holds the slot open — no layout shift. */
-.rot-word {
-  color:var(--accent);
-  -webkit-text-fill-color:var(--accent);   /* explicit: never inherit transparent */
-  opacity:0;
-  transition:opacity 0.2s ease;
-}
-.rot-word.is-on {
-  opacity:1;
-  transition:opacity 0.28s ease 0.2s;
-}
+/* ── Rotating word ── */
+#rotating-word { display:inline-block; opacity:1; transition:opacity 0.25s ease; }
 @media(prefers-reduced-motion:reduce){
   .reveal { opacity:1; transform:none; }
   .hero-pill-dot { animation:none; }
-  .rot-word { transition:none; }
 }
 </style>
 </head>
@@ -393,7 +363,7 @@ textarea.form-input { resize:vertical; }
       <span class="hero-pill-dot"></span>
       <span class="hero-pill-text" data-i18n="hero.tag">Digital Growth Strategy</span>
     </div>
-    <h1 class="reveal reveal-delay-1" id="hero-h1"><span id="hero-h1-prefix">Your Business Deserves a</span> <span class="rotator"><span class="rotator-sizer" id="rotator-sizer" aria-hidden="true">Measurable</span><span class="rot-word is-on" id="rot-a">Smarter</span><span class="rot-word" id="rot-b" aria-hidden="true"></span></span> <em><span id="hero-h1-suffix">Growth Engine.</span></em></h1>
+    <h1 class="reveal reveal-delay-1" id="hero-h1"><span id="hero-h1-prefix">Your Business Deserves a</span> <em><span id="rotating-word">Smarter</span> <span id="hero-h1-suffix">Growth Engine.</span></em></h1>
     <p class="reveal reveal-delay-2" data-i18n="hero.sub">We help businesses build complete digital growth engines — strategy, execution, and AI automation — so you can focus on what you do best.</p>
     <div class="hero-btns reveal reveal-delay-3">
       <button class="btn-primary" onclick="navigate('contact')"><span data-i18n="hero.cta">Book a Free Audit</span> <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14"/><path d="m12 5 7 7-7 7"/></svg></button>
@@ -474,7 +444,9 @@ textarea.form-input { resize:vertical; }
         <input class="form-input" type="email" id="f-email"    placeholder="Email address"      data-ph-i18n="contact.form.email">
         <input class="form-input" type="text"  id="f-business" placeholder="Business name"      data-ph-i18n="contact.form.business">
         <textarea class="form-input" id="f-message" rows="5"   placeholder="Tell me about your business and what you need" data-ph-i18n="contact.form.message"></textarea>
-        <button class="form-submit" onclick="submitForm()" data-i18n="contact.form.send">Send Message →</button>
+        <input type="text" id="f-website" name="_gotcha" tabindex="-1" autocomplete="off" aria-hidden="true" style="position:absolute;left:-9999px;opacity:0;height:0;width:0">
+        <button class="form-submit" id="f-submit" onclick="submitForm()" data-i18n="contact.form.send">Send Message →</button>
+        <div id="form-error" style="display:none;font-size:13.5px;color:#E0736B;line-height:1.55"></div>
       </div>
     </div>
     <div id="contact-success" class="form-success" style="display:none"></div>
@@ -608,36 +580,36 @@ const T = {
       ],
       addons:{ title:"Also available as add-ons",
         items:["AI-powered customer support bot","CRM setup & automation","Fulfillment & CX audit","Sales templates by funnel stage","Market entry brief (LATAM → USA)","Reporting dashboards"] },
-      detail:{ title:"What we actually do", sub:"Tap any service to see what’s inside.", items:[
-        { id:"audit", name:"Digital Growth Audit", tease:"A full read of your digital operation — and what to fix first.",
-          lead:"Most businesses aren’t missing effort. They’re missing a clear read of which channel is leaking and which one is quietly working.",
-          points:["Every front reviewed at once — web, email, ads, e-commerce, support","A prioritized list separating quick wins from structural work","A 90-day roadmap you can run with us, or without us"],
+      detail:{ title:"What we actually do", sub:"Tap any service to see what\u2019s inside.", items:[
+        { id:"audit", name:"Digital Growth Audit", tease:"A full read of your digital operation \u2014 and what to fix first.",
+          lead:"Most businesses aren\u2019t missing effort. They\u2019re missing a clear read of which channel is leaking and which one is quietly working.",
+          points:["Every front reviewed at once \u2014 web, email, ads, e-commerce, support","A prioritized list separating quick wins from structural work","A 90-day roadmap you can run with us, or without us"],
           proof:"Includes a <strong>market entry brief</strong> for companies moving into the US market.",
-          model:"Model A — Project", cta:"See what we’d look at" },
+          model:"Model A \u2014 Project", cta:"See what we\u2019d look at" },
         { id:"channels", name:"Channel Optimization", tease:"The channels that drive revenue, rebuilt to actually convert.",
           lead:"We rebuild the channels that move revenue, and connect them so leads stop falling between platforms.",
           points:["Web, SEO and content built to be found","Email that reaches the inbox and converts","Meta Ads, Shopify, telephony and CRM working as one system","Paid campaigns run only where the return can be measured"],
           proof:"<strong>CAD/CAM Center Miami:</strong> email open rate more than tripled, leads up 20%, Shopify sales up 4% month over month.",
-          model:"Model A or B", cta:"Where’s yours leaking?" },
-        { id:"ai-agents", name:"AI Agents", tease:"Follow-up that doesn’t depend on someone remembering.",
+          model:"Model A or B", cta:"Where\u2019s yours leaking?" },
+        { id:"ai-agents", name:"AI Agents", tease:"Follow-up that doesn\u2019t depend on someone remembering.",
           lead:"Most businesses lose deals they already did the hard work to win. The estimate goes out, nobody follows up, and it quietly dies.",
-          body:"We build agents that handle the work nobody has time for — every day, in your voice, without being reminded.",
+          body:"We build agents that handle the work nobody has time for \u2014 every day, in your voice, without being reminded.",
           points:["Estimate follow-up at 7, 14 and 28 days","Inbound qualified and routed before you open your laptop","Support triaged and resolved without tying up your sales line","Customer service trained on your business, not a generic chatbot"],
           proof:"<strong>Live at CAD/CAM Center Miami:</strong> automated estimate follow-up at 7, 14 and 28 days.",
           model:"Model A or B", cta:"What could yours do?" },
         { id:"cx", name:"CX & Operations", tease:"What happens after the sale, standardized.",
           lead:"Acquisition gets all the attention. What happens after someone buys is what decides whether they come back.",
           points:["Fulfillment and delivery experience, audited end to end","Response time standards your team can actually hold","Sales and support templates by funnel stage"],
-          model:"Model A — Project", cta:"Where does yours break?" },
+          model:"Model A \u2014 Project", cta:"Where does yours break?" },
         { id:"reporting", name:"Reporting & Dashboards", tease:"Know which channel is actually making you money.",
-          lead:"If you can’t see which channel produced last month’s revenue, every budget decision is a guess.",
-          points:["KPIs defined once, then tracked consistently","One short monthly read — no vanity metrics","ROI per channel, including ours"],
+          lead:"If you can\u2019t see which channel produced last month\u2019s revenue, every budget decision is a guess.",
+          points:["KPIs defined once, then tracked consistently","One short monthly read \u2014 no vanity metrics","ROI per channel, including ours"],
           model:"Model A or B", cta:"See a sample report" },
         { id:"cmo", name:"Fractional CMO", tease:"A senior marketing lead, without the senior marketing salary.",
-          lead:"For founders who need marketing decisions made well, but don’t yet need a full-time executive.",
+          lead:"For founders who need marketing decisions made well, but don\u2019t yet need a full-time executive.",
           body:"Wraps every service above into one engagement, at agreed hours per month.",
-          points:["Strategy set monthly — what to do next, and what to stop","Oversight of execution, whether it’s us or your team doing it","A second opinion when the call is yours to make"],
-          model:"Model B — Monthly", cta:"Is this your stage?" }
+          points:["Strategy set monthly \u2014 what to do next, and what to stop","Oversight of execution, whether it\u2019s us or your team doing it","A second opinion when the call is yours to make"],
+          model:"Model B \u2014 Monthly", cta:"Is this your stage?" }
       ]}
     },
     about:{ headline:"15+ years building brands and growing businesses.",
@@ -650,7 +622,10 @@ const T = {
       sub:"Fill out the form and I'll get back to you within 24 hours.",
       form:{ name:"Your name", email:"Email address", business:"Business name",
         message:"Tell me about your business and what you need", send:"Send Message →",
-        sent:"✓ Message sent! I'll be in touch soon." } },
+        sending:"Sending…",
+        sent:"✓ Message sent! I'll be in touch soon.",
+        error:"Something went wrong. Write me directly at hello@mpgrowth.co",
+        required:"Please complete name, email and message." } },
     footer:{ tagline:"Digital growth strategy for businesses ready to scale.", copy:"© 2026 MPGrowth. All rights reserved." }
   },
   es:{
@@ -699,36 +674,36 @@ const T = {
       ],
       addons:{ title:"También disponibles como add-ons",
         items:["Bot de soporte al cliente con IA","Setup y automatización CRM","Auditoría de fulfillment y CX","Templates de ventas por etapa del funnel","Market entry brief (LATAM → USA)","Dashboards de reporting"] },
-      detail:{ title:"Qué hacemos en concreto", sub:"Tocá cualquier servicio para ver qué incluye.", items:[
-        { id:"audit", name:"Auditoría de Crecimiento Digital", tease:"Una lectura completa de tu operación digital — y qué arreglar primero.",
-          lead:"A la mayoría de los negocios no les falta esfuerzo. Les falta ver con claridad qué canal está perdiendo plata y cuál está funcionando en silencio.",
-          points:["Todos los frentes revisados a la vez — web, email, ads, e-commerce, soporte","Una lista priorizada que separa las mejoras rápidas del trabajo de fondo","Una hoja de ruta a 90 días que podés ejecutar con nosotros, o sin nosotros"],
+      detail:{ title:"Qu\u00e9 hacemos en concreto", sub:"Toc\u00e1 cualquier servicio para ver qu\u00e9 incluye.", items:[
+        { id:"audit", name:"Auditor\u00eda de Crecimiento Digital", tease:"Una lectura completa de tu operaci\u00f3n digital \u2014 y qu\u00e9 arreglar primero.",
+          lead:"A la mayor\u00eda de los negocios no les falta esfuerzo. Les falta ver con claridad qu\u00e9 canal est\u00e1 perdiendo plata y cu\u00e1l est\u00e1 funcionando en silencio.",
+          points:["Todos los frentes revisados a la vez \u2014 web, email, ads, e-commerce, soporte","Una lista priorizada que separa las mejoras r\u00e1pidas del trabajo de fondo","Una hoja de ruta a 90 d\u00edas que pod\u00e9s ejecutar con nosotros, o sin nosotros"],
           proof:"Incluye un <strong>market entry brief</strong> para empresas que entran al mercado de EE. UU.",
-          model:"Modelo A — Proyecto", cta:"¿Qué miraríamos en el tuyo?" },
-        { id:"channels", name:"Optimización de Canales", tease:"Los canales que generan ingresos, reconstruidos para que conviertan.",
+          model:"Modelo A \u2014 Proyecto", cta:"\u00bfQu\u00e9 mirar\u00edamos en el tuyo?" },
+        { id:"channels", name:"Optimizaci\u00f3n de Canales", tease:"Los canales que generan ingresos, reconstruidos para que conviertan.",
           lead:"Reconstruimos los canales que mueven el ingreso, y los conectamos para que los leads dejen de perderse entre plataformas.",
-          points:["Web, SEO y contenido pensados para que te encuentren","Email que llega al inbox y convierte","Meta Ads, Shopify, telefonía y CRM funcionando como un solo sistema","Campañas pagas solo donde el retorno se puede medir"],
-          proof:"<strong>CAD/CAM Center Miami:</strong> la tasa de apertura de email más que se triplicó, leads +20%, ventas de Shopify +4% mes a mes.",
-          model:"Modelo A o B", cta:"¿Dónde pierde el tuyo?" },
+          points:["Web, SEO y contenido pensados para que te encuentren","Email que llega al inbox y convierte","Meta Ads, Shopify, telefon\u00eda y CRM funcionando como un solo sistema","Campa\u00f1as pagas solo donde el retorno se puede medir"],
+          proof:"<strong>CAD/CAM Center Miami:</strong> la tasa de apertura de email m\u00e1s que se triplic\u00f3, leads +20%, ventas de Shopify +4% mes a mes.",
+          model:"Modelo A o B", cta:"\u00bfD\u00f3nde pierde el tuyo?" },
         { id:"ai-agents", name:"Agentes de IA", tease:"Seguimiento que no depende de que alguien se acuerde.",
-          lead:"La mayoría de los negocios pierden ventas que ya tenían casi cerradas. Sale el presupuesto, nadie hace el seguimiento, y se muere en silencio.",
-          body:"Construimos agentes que se hacen cargo del trabajo que nadie tiene tiempo de hacer — todos los días, con tu tono, sin que nadie se lo recuerde.",
-          points:["Seguimiento de presupuestos a los 7, 14 y 28 días","Consultas entrantes calificadas y derivadas antes de que abras la laptop","Soporte filtrado y resuelto sin ocupar tu línea comercial","Atención al cliente entrenada en tu negocio, no un chatbot genérico"],
-          proof:"<strong>Activo en CAD/CAM Center Miami:</strong> seguimiento automático de presupuestos a los 7, 14 y 28 días.",
-          model:"Modelo A o B", cta:"¿Qué podría hacer el tuyo?" },
-        { id:"cx", name:"CX y Operaciones", tease:"Lo que pasa después de la venta, estandarizado.",
-          lead:"La captación se lleva toda la atención. Lo que pasa después de que alguien compra es lo que define si vuelve.",
+          lead:"La mayor\u00eda de los negocios pierden ventas que ya ten\u00edan casi cerradas. Sale el presupuesto, nadie hace el seguimiento, y se muere en silencio.",
+          body:"Construimos agentes que se hacen cargo del trabajo que nadie tiene tiempo de hacer \u2014 todos los d\u00edas, con tu tono, sin que nadie se lo recuerde.",
+          points:["Seguimiento de presupuestos a los 7, 14 y 28 d\u00edas","Consultas entrantes calificadas y derivadas antes de que abras la laptop","Soporte filtrado y resuelto sin ocupar tu l\u00ednea comercial","Atenci\u00f3n al cliente entrenada en tu negocio, no un chatbot gen\u00e9rico"],
+          proof:"<strong>Activo en CAD/CAM Center Miami:</strong> seguimiento autom\u00e1tico de presupuestos a los 7, 14 y 28 d\u00edas.",
+          model:"Modelo A o B", cta:"\u00bfQu\u00e9 podr\u00eda hacer el tuyo?" },
+        { id:"cx", name:"CX y Operaciones", tease:"Lo que pasa despu\u00e9s de la venta, estandarizado.",
+          lead:"La captaci\u00f3n se lleva toda la atenci\u00f3n. Lo que pasa despu\u00e9s de que alguien compra es lo que define si vuelve.",
           points:["Fulfillment y experiencia de entrega, auditados de punta a punta","Tiempos de respuesta que tu equipo puede sostener de verdad","Templates de ventas y soporte por etapa del funnel"],
-          model:"Modelo A — Proyecto", cta:"¿Dónde se rompe el tuyo?" },
-        { id:"reporting", name:"Reportes y Dashboards", tease:"Saber qué canal te está dando plata de verdad.",
-          lead:"Si no podés ver qué canal generó el ingreso del mes pasado, cada decisión de presupuesto es una adivinanza.",
-          points:["KPIs definidos una vez, medidos siempre igual","Una lectura mensual corta — sin métricas de vanidad","ROI por canal, incluido el nuestro"],
+          model:"Modelo A \u2014 Proyecto", cta:"\u00bfD\u00f3nde se rompe el tuyo?" },
+        { id:"reporting", name:"Reportes y Dashboards", tease:"Saber qu\u00e9 canal te est\u00e1 dando plata de verdad.",
+          lead:"Si no pod\u00e9s ver qu\u00e9 canal gener\u00f3 el ingreso del mes pasado, cada decisi\u00f3n de presupuesto es una adivinanza.",
+          points:["KPIs definidos una vez, medidos siempre igual","Una lectura mensual corta \u2014 sin m\u00e9tricas de vanidad","ROI por canal, incluido el nuestro"],
           model:"Modelo A o B", cta:"Ver un reporte de ejemplo" },
         { id:"cmo", name:"CMO Fraccional", tease:"Un referente de marketing senior, sin el sueldo de un senior.",
-          lead:"Para founders que necesitan que las decisiones de marketing se tomen bien, pero todavía no necesitan un ejecutivo full-time.",
-          body:"Envuelve todos los servicios anteriores en una sola relación, con horas pactadas por mes.",
-          points:["Estrategia definida cada mes — qué hacer y qué dejar de hacer","Supervisión de la ejecución, la hagamos nosotros o tu equipo","Una segunda opinión cuando la decisión es tuya"],
-          model:"Modelo B — Mensual", cta:"¿Es tu momento?" }
+          lead:"Para founders que necesitan que las decisiones de marketing se tomen bien, pero todav\u00eda no necesitan un ejecutivo full-time.",
+          body:"Envuelve todos los servicios anteriores en una sola relaci\u00f3n, con horas pactadas por mes.",
+          points:["Estrategia definida cada mes \u2014 qu\u00e9 hacer y qu\u00e9 dejar de hacer","Supervisi\u00f3n de la ejecuci\u00f3n, la hagamos nosotros o tu equipo","Una segunda opini\u00f3n cuando la decisi\u00f3n es tuya"],
+          model:"Modelo B \u2014 Mensual", cta:"\u00bfEs tu momento?" }
       ]}
     },
     about:{ headline:"15+ años construyendo marcas y haciendo crecer negocios.",
@@ -741,58 +716,15 @@ const T = {
       sub:"Completá el formulario y te respondo en menos de 24 horas.",
       form:{ name:"Tu nombre", email:"Email", business:"Nombre del negocio",
         message:"Contame sobre tu negocio y qué necesitás", send:"Enviar Mensaje →",
-        sent:"✓ ¡Mensaje enviado! Te contacto pronto." } },
+        sending:"Enviando…",
+        sent:"✓ ¡Mensaje enviado! Te contacto pronto.",
+        error:"Algo falló. Escribime directo a hello@mpgrowth.co",
+        required:"Completá nombre, email y mensaje." } },
     footer:{ tagline:"Estrategia de crecimiento digital para empresas listas para escalar.", copy:"© 2026 MPGrowth. Todos los derechos reservados." }
   }
 };
  
 let currentLang='en', currentPage='home';
- 
-/* ── Rotating word ──
-   Declared BEFORE renderAll() runs, because renderAll() calls syncRotator(). */
-const WORDS = {
-  en: ["Smarter","Faster","Scalable","AI-Powered","Measurable"],
-  es: ["Más Inteligente","Más Rápido","Escalable","Con IA","Medible"]
-};
-let wordIndex = 0;
-let rotFront  = 'rot-a';
- 
-/* The hidden sizer holds the longest word of the active language, so the slot
-   width never changes mid-rotation and the headline never re-wraps. */
-function syncRotator(){
-  const list  = WORDS[currentLang];
-  const sizer = document.getElementById('rotator-sizer');
-  const a = document.getElementById('rot-a');
-  const b = document.getElementById('rot-b');
-  if(sizer) sizer.textContent = list.reduce((x,y)=> y.length > x.length ? y : x, list[0]);
-  if(!a || !b) return;
-  wordIndex = 0;
-  rotFront  = 'rot-a';
-  a.textContent = list[0];
-  a.classList.add('is-on');
-  a.removeAttribute('aria-hidden');
-  b.textContent = '';
-  b.classList.remove('is-on');
-  b.setAttribute('aria-hidden','true');
-}
- 
-/* Crossfade: the outgoing and incoming layers overlap, so the slot is never
-   blank between words. */
-function rotateWord(){
-  const list = WORDS[currentLang];
-  const a = document.getElementById('rot-a');
-  const b = document.getElementById('rot-b');
-  if(!a || !b) return;
-  const cur  = rotFront === 'rot-a' ? a : b;
-  const next = rotFront === 'rot-a' ? b : a;
-  wordIndex = (wordIndex + 1) % list.length;
-  next.textContent = list[wordIndex];
-  next.removeAttribute('aria-hidden');
-  next.classList.add('is-on');
-  cur.classList.remove('is-on');
-  cur.setAttribute('aria-hidden','true');
-  rotFront = rotFront === 'rot-a' ? 'rot-b' : 'rot-a';
-}
  
 function navigate(page){
   currentPage=page;
@@ -827,7 +759,6 @@ function renderAll(){
   const h1suf = document.getElementById('hero-h1-suffix');
   if(currentLang==='en'){ if(h1pre) h1pre.textContent='Your Business Deserves a'; if(h1suf) h1suf.textContent='Growth Engine.'; }
   else { if(h1pre) h1pre.textContent='Tu Negocio Merece un'; if(h1suf) h1suf.textContent='Motor de Crecimiento.'; }
-  syncRotator();
  
   document.querySelectorAll('.nav-link').forEach(l=>{
     if(l.dataset.page) l.textContent=t.nav[l.dataset.page];
@@ -919,19 +850,72 @@ function renderAll(){
   // Contact reset
   document.getElementById('contact-form').style.display='block';
   document.getElementById('contact-success').style.display='none';
+  const fe = document.getElementById('form-error');
+  if(fe){ fe.style.display='none'; fe.textContent=''; }
  
   setTimeout(()=>{ observeReveals(); },80);
 }
  
-function submitForm(){
-  const name=document.getElementById('f-name').value;
-  const email=document.getElementById('f-email').value;
-  const message=document.getElementById('f-message').value;
-  if(name&&email&&message){
-    const t=T[currentLang];
-    document.getElementById('contact-form').style.display='none';
-    document.getElementById('contact-success').style.display='block';
-    document.getElementById('contact-success').textContent=t.contact.form.sent;
+const FORMSPREE = "https://formspree.io/f/mnpnadgp";
+ 
+async function submitForm(){
+  const t = T[currentLang];
+  const btn = document.getElementById('f-submit');
+  const err = document.getElementById('form-error');
+ 
+  const name     = document.getElementById('f-name').value.trim();
+  const email    = document.getElementById('f-email').value.trim();
+  const business = document.getElementById('f-business').value.trim();
+  const message  = document.getElementById('f-message').value.trim();
+  const gotcha   = document.getElementById('f-website').value;
+ 
+  err.style.display = 'none';
+ 
+  if(!name || !email || !message){
+    err.textContent = t.contact.form.required;
+    err.style.display = 'block';
+    return;
+  }
+  if(!/^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/.test(email)){
+    err.textContent = t.contact.form.required;
+    err.style.display = 'block';
+    return;
+  }
+  if(gotcha) return; // bot
+ 
+  btn.disabled = true;
+  btn.style.opacity = '0.6';
+  btn.textContent = t.contact.form.sending;
+ 
+  try{
+    const res = await fetch(FORMSPREE,{
+      method:'POST',
+      headers:{'Accept':'application/json','Content-Type':'application/json'},
+      body: JSON.stringify({
+        name: name,
+        email: email,
+        business: business || '—',
+        message: message,
+        _subject: 'MPGrowth — new inquiry from ' + name,
+        language: currentLang
+      })
+    });
+ 
+    if(res.ok){
+      document.getElementById('contact-form').style.display='none';
+      const ok = document.getElementById('contact-success');
+      ok.style.display='block';
+      ok.textContent = t.contact.form.sent;
+    } else {
+      throw new Error('bad response');
+    }
+  } catch(e){
+    err.textContent = t.contact.form.error;
+    err.style.display = 'block';
+  } finally {
+    btn.disabled = false;
+    btn.style.opacity = '1';
+    btn.textContent = t.contact.form.send;
   }
 }
  
@@ -940,6 +924,24 @@ window.addEventListener('scroll',()=>{
 });
  
 renderAll();
+ 
+/* ── Rotating word ── */
+const WORDS = {
+  en: ["Smarter","Faster","Scalable","AI-Powered","Measurable"],
+  es: ["Más Inteligente","Más Rápido","Escalable","Con IA","Medible"]
+};
+let wordIndex = 0;
+ 
+function rotateWord(){
+  const el = document.getElementById("rotating-word");
+  if(!el) return;
+  el.style.opacity = '0';
+  setTimeout(()=>{
+    wordIndex = (wordIndex + 1) % WORDS[currentLang].length;
+    el.textContent = WORDS[currentLang][wordIndex];
+    el.style.opacity = '1';
+  }, 280);
+}
  
 setInterval(rotateWord, 2400);
 </script>
