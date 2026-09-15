@@ -363,7 +363,7 @@ textarea.form-input { resize:vertical; }
       <span class="hero-pill-dot"></span>
       <span class="hero-pill-text" data-i18n="hero.tag">Digital Growth Strategy</span>
     </div>
-    <h1 class="reveal reveal-delay-1" id="hero-h1"><span id="hero-h1-prefix">Your Business Deserves a</span> <em><span id="rotating-word">Smarter</span> <span id="hero-h1-suffix">Growth Engine.</span></em></h1>
+    <h1 class="reveal reveal-delay-1" id="hero-h1"><span id="hero-h1-prefix">Your Business Deserves a</span> <em id="hero-em"><span id="rotating-word">Smarter</span> <span id="hero-h1-suffix">Growth Engine.</span></em></h1>
     <p class="reveal reveal-delay-2" data-i18n="hero.sub">We help businesses build complete digital growth engines — strategy, execution, and AI automation — so you can focus on what you do best.</p>
     <div class="hero-btns reveal reveal-delay-3">
       <button class="btn-primary" onclick="navigate('contact')"><span data-i18n="hero.cta">Book a Free Audit</span> <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14"/><path d="m12 5 7 7-7 7"/></svg></button>
@@ -726,6 +726,14 @@ const T = {
  
 let currentLang='en', currentPage='home';
  
+/* Palabras rotativas. En ingles el adjetivo va antes del sustantivo,
+   en espanol va despues — por eso el orden del h1 se invierte. */
+const WORDS = {
+  en: ["Smarter","Faster","Scalable","AI-Powered","Measurable"],
+  es: ["Más Inteligente","Más Rápido","Escalable","Impulsado por IA","Medible"]
+};
+let wordIndex = 0;
+ 
 function navigate(page){
   currentPage=page;
   document.querySelectorAll('.page').forEach(p=>p.classList.remove('active'));
@@ -754,11 +762,19 @@ function renderAll(){
     if(val) el.placeholder=val;
   });
  
-  // Hero h1 manual (preserve rotating-word span)
+  // Hero h1: el orden cambia por idioma
   const h1pre = document.getElementById('hero-h1-prefix');
-  const h1suf = document.getElementById('hero-h1-suffix');
-  if(currentLang==='en'){ if(h1pre) h1pre.textContent='Your Business Deserves a'; if(h1suf) h1suf.textContent='Growth Engine.'; }
-  else { if(h1pre) h1pre.textContent='Tu Negocio Merece un'; if(h1suf) h1suf.textContent='Motor de Crecimiento.'; }
+  const em    = document.getElementById('hero-em');
+  if(h1pre && em){
+    const word = WORDS[currentLang][wordIndex];
+    if(currentLang==='en'){
+      h1pre.textContent = 'Your Business Deserves a';
+      em.innerHTML = '<span id="rotating-word">'+word+'</span> <span id="hero-h1-suffix">Growth Engine.</span>';
+    } else {
+      h1pre.textContent = 'Tu Negocio Merece un';
+      em.innerHTML = '<span id="hero-h1-suffix">Motor de Crecimiento</span> <span id="rotating-word">'+word+'</span>.';
+    }
+  }
  
   document.querySelectorAll('.nav-link').forEach(l=>{
     if(l.dataset.page) l.textContent=t.nav[l.dataset.page];
@@ -926,12 +942,6 @@ window.addEventListener('scroll',()=>{
 renderAll();
  
 /* ── Rotating word ── */
-const WORDS = {
-  en: ["Smarter","Faster","Scalable","AI-Powered","Measurable"],
-  es: ["Más Inteligente","Más Rápido","Escalable","Con IA","Medible"]
-};
-let wordIndex = 0;
- 
 function rotateWord(){
   const el = document.getElementById("rotating-word");
   if(!el) return;
@@ -947,4 +957,3 @@ setInterval(rotateWord, 2400);
 </script>
 </body>
 </html>
- 
